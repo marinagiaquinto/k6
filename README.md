@@ -15,10 +15,10 @@ Link para instalação do k6:
  - Rápido resultado
 
  **Carga Constante**
-export const options1 = {
-    vus: 1,
-    duration: "1m"
-}
+    export const options1 = {
+        vus: 1,
+        duration: "1m"
+    }
 
 ### I.b Load test (teste de carga)
 
@@ -36,19 +36,19 @@ Objetivo: compreender o desempenho da aplicação frente a grandes cargas e requ
 - Garantir funcionamento
 
 **Carga Constante**
-export const options1 = {
-    vus: 100,
-    duration: "20m"
-}
+    export const options1 = {
+        vus: 100,
+        duration: "20m"
+    }
 
 **Carga Variável**
-export const options2 = {
-    stage:[
-        {duration: "5m", target:100 }
-        {duration: "10m", target: 100}
-        {duration: "5m", target: 0}
-    ]
-}
+    export const options2 = {
+        stage:[
+            {duration: "5m", target:100 }
+            {duration: "10m", target: 100}
+            {duration: "5m", target: 0}
+        ]
+    }
 
 ### I.c Stress e Skipe test
 
@@ -61,31 +61,31 @@ Objetivo: Responder como o sistema se comportará sobre alta carga
 
 **4 Perguntas a serem respondidas ao realizar o teste de Stress**
 
-    1. Como seu sistema se comporta em condições extremas?
-    2. Qual é a capacidade máxima do seu sistema em termos de usuários ou taxa de transferência?
-    3. Qual o ponto de ruptura do seu sistema (ponto em que o sistema não suporta mais receber requisições / carga de usuários)?
-    4. O sistema se recupera sem interveção manual após o término do teste de estresse?
+1. Como seu sistema se comporta em condições extremas?
+2. Qual é a capacidade máxima do seu sistema em termos de usuários ou taxa de transferência?
+3. Qual o ponto de ruptura do seu sistema (ponto em que o sistema não suporta mais receber requisições / carga de usuários)?
+4. O sistema se recupera sem interveção manual após o término do teste de estresse?
 
 *Grande quantidade de usuários que aumentam progressivamente ao longo de alguns minutos.*
 
-export const options = {
-    stage:[
-        {duration: "2m", target:100 }
-        {duration: "5m", target: 100}
-        {duration: "2m", target: 200}
-        {duration: "5m", target: 200}
-        {duration: "2m", target: 300}
-        {duration: "5m", target: 300}
-        {duration: "2m", target: 400}
-        {duration: "5m", target: 400}
-        {duration: "10m", target: 0}
-    ]
-}
+    export const options = {
+        stage:[
+            {duration: "2m", target:100 }
+            {duration: "5m", target: 100}
+            {duration: "2m", target: 200}
+            {duration: "5m", target: 200}
+            {duration: "2m", target: 300}
+            {duration: "5m", target: 300}
+            {duration: "2m", target: 400}
+            {duration: "5m", target: 400}
+            {duration: "10m", target: 0}
+        ]
+    }
 
 **O que pretende responder:** 
 
-    1. A rapidez com que os mecanismos de dimensionamento automático reagem ao aumento da carga. (Diante do testes de stress, a aplicação deve escalar, aumentando e diminuindo sua capacidade conforma a carga. Isso faz com que se gaste apenas com a infoaestrutura necessária, evitando ter uma capacidade maior do que a necessária por demanda em cada serviço.)
-    2. Se há alguma falha durante os eventos de dimensionamento.
+1. A rapidez com que os mecanismos de dimensionamento automático reagem ao aumento da carga. (Diante do testes de stress, a aplicação deve escalar, aumentando e diminuindo sua capacidade conforma a carga. Isso faz com que se gaste apenas com a infoaestrutura necessária, evitando ter uma capacidade maior do que a necessária por demanda em cada serviço.)
+2. Se há alguma falha durante os eventos de dimensionamento.
 
 
 #### I.c.b Spike Teste
@@ -109,14 +109,14 @@ Diferente do teste de stress, não aumenta de forma gradual a carga.
     o sistema trava e não se recupera depois que o tráfego repentino diminui.
 
 
-export const options = {
-    stage:[
-        {duration: "10s", target:100 }
-        {duration: "1m", target: 100}
-        {duration: "10s", target: 1400}
-        {duration: "3m", target: 1400}
-        {duration: "10s", target: 100}
-        {duration: "3m", target: 100}
-        {duration: "10s", target: 0}
-    ]
-}
+    export const options = {
+        stage:[
+            {duration: "10s", target:100 }
+            {duration: "1m", target: 100}
+            {duration: "10s", target: 1400}
+            {duration: "3m", target: 1400}
+            {duration: "10s", target: 100}
+            {duration: "3m", target: 100}
+            {duration: "10s", target: 0}
+        ]
+    }
