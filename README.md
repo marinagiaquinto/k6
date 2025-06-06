@@ -2,28 +2,31 @@
 Link para instalação do k6:
  https://grafana.com/docs/k6/latest/set-up/install-k6/
 
- ## I. Tipos de teste de performance
+## I. Tipos de teste de performance
 
- ### I.a Smoke test (teste de fumaça)
 
- Visa validar um mínimo funcionamento, uma abordagem para carga mínima. 
- Objetivo: testar se a feature e o script são funcionais e/ou continuam funcionais após alguma alteração.
+### 1. Smoke test (teste de fumaça)
 
- - Carga mínima
- - Cenário Simples
- - Funcionalidade core
- - Rápido resultado
+Visa validar um mínimo funcionamento, uma abordagem para carga mínima. 
+Objetivo: testar se a feature e o script são funcionais e/ou continuam funcionais após alguma alteração.
 
- **Carga Constante**
+- Carga mínima
+- Cenário Simples
+- Funcionalidade core
+- Rápido resultado
+
+**Carga Constante**
     export const options1 = {
         vus: 1,
         duration: "1m"
     }
 
-### I.b Load test (teste de carga)
+
+
+### 2. Load test (teste de carga)
 
 É a metodologia mais comum e a que comumente se referem quando falam de teste de performance. 
-Objetivo: compreender o desempenho da aplicação frente a grandes cargas e requisições simultâneas. 
+**Objetivo: compreender o desempenho da aplicação frente a grandes cargas e requisições simultâneas.**
 
 - Quantidade de tráfego -> deve-se levantar a quantidade de tráfego que a aplicação costumar ter nos horários de pico. Caso não tenha, alinhar com o time a quantidade de usuários esperados.
 
@@ -50,14 +53,17 @@ Objetivo: compreender o desempenho da aplicação frente a grandes cargas e requ
         ]
     }
 
-### I.c Stress e Skipe test
 
-Objetivo: Responder como o sistema se comportará sobre alta carga
 
-- Avaliar disponibilidade, estabilidade e a recuperabilidade do sistema.
-- Avaliar a arquitetura da aplicação, descobrindo possíveis gargalos. 
+### 3. Stress e Skipe test
 
-#### I.c.a Teste de Stress
+
+**Objetivo:** 
+**- Avaliar a estabilidade do sistema sob condições adversas**
+    - disponibilidade, estabilidade e a recuperabilidade do sistema.
+    - Avaliar a arquitetura da aplicação, descobrindo possíveis gargalos. 
+
+#### 3.a Teste de Stress
 
 **4 Perguntas a serem respondidas ao realizar o teste de Stress**
 
@@ -88,7 +94,7 @@ Objetivo: Responder como o sistema se comportará sobre alta carga
 2. Se há alguma falha durante os eventos de dimensionamento.
 
 
-#### I.c.b Spike Teste
+#### 3.b Spike Teste
 
 Diferente do teste de stress, não aumenta de forma gradual a carga. 
 *Carga extrema em um período de tempo muito curto (fração de segundos).*
@@ -120,3 +126,257 @@ Diferente do teste de stress, não aumenta de forma gradual a carga.
             {duration: "10s", target: 0}
         ]
     }
+
+
+### 4. Soak Testing 
+
+**Objetivo: avaliar a confiabilidade em longos períodos de tempo**
+
+Simula dias de tráfego no sistema em poucas horas
+
+O que pretende responder:
+- O sistema sofre de bugs ou vazamento de memória?
+- Existem reinicializações inesperadas do aplicativo que fazem perder solicitações?
+- Existem bugs esporádicos relacionados a condições de corrida (quando dois recursos computacionais estão tentando acessar uma mesma informação)?
+
+- Certificar que seu banco de dados não esgote o espaço de armazenamento alocado e pare.
+- Certificar que os logs não esgotem o armazenamento em disco alocado
+- Certificar que os serviços externos dos quais você depende não parem de funcionar após a execução de uma certa quantidade de solicitações. 
+
+    export const options = {
+        stage:[
+            {duration: "2m", target:400 }
+            {duration: "3h56m", target: 400}
+            {duration: "2m", target: 0}
+        ]
+    }
+
+
+ATENÇÃO:
+- o objetivo do teste não é atingir o ponto de ruptura (o ponto em que o sistema passa a ter dificuldade de funcionamento ao continuar aumentando a quantidade de usuários). Portanto, deve-se ter o conhecimento do ponto de ruptura para ficar a baixo dele. Mantendo +- 80% de sua capacidade, de forma constante.
+- ter alinhado com a equipe o custo de realizar esse teste de forma prolongada (existem testes que duram dias, não só horas). Frente ao seu alto custo, é um dos testes que mais precisam de planejamento prévio para ser executado, tendo sempre em mente se ele atinge o objetivo de teste esperado pela equipe. 
+
+
+### 5. Breakpoint Testing (pontos de interupção; teste da capacidade; teste de carga pontual ou teste de limite)
+
+**Objetivo: encontrar os limites do seu sistema**
+
+- Ajustar/ cuidar de pontos fracos do sistema, buscando limites maiores suportados pelo sistema. 
+- Ajudar a planejar e verificar a correção de sistema com baixo limite de utilização.
+
+Quando realizar esse teste:
+- Após mudanças significativas na base de código/infraestrutura
+- Consumo elevado de recursos pelo seu sistema
+- Ajuda a encontrar os limites do sistema (ex: qutd de usuários) e ajuda a verificar após alterações se o limite realmete mudou.
+
+- Atenção a elasticidade de ambientes de nuvem
+- Aumento de carga gradual para essa modalidade
+- Tipo de teste de ciclo iterativo (deve ser conduzido diversas vezes até conseguir verificar o limite do sistema, não é um teste feito uma única vez)
+- Interrupção manual ou automática. (chegando ao limite, pode parar o teste)
+
+**Seu sistema foi aprovado nos demais tipos de teste?**
+Esse teste deve ser realizado com sistemas mais maduros, que já tiveram a aprovação dos outros testes de performance. Não é um tipo de teste a ser realizado inicialmente. 
+
+    export const options = {
+        executor: 'ramping-arrival-rate'
+        stage:[
+            {duration: "2h", target:20000 }
+        ]
+    }
+
+
+## II. Execução
+    cd <pasta/modulo>
+    k6 run <aula>
+
+
+## III. Ciclo de vida (aula 10)
+
+Diferente de outras ferramentas de teste de performance (ex: Jmeter), o K6 tem um ciclo bem definido. Ou seja, independente do tipo de teste e/ou tempo de execução, sempre passará pela mesma estrutura (mesmas fases, na mesma ordem):
+
+### 1. Inicialização
+Etapa de configuração.
+Essa chamada ocorre uma única vez e é nela em que carregaremos os arquivos locais (dados compartilhados com todos os usuários virtuais - vu), importamos os módulos a serem utilizados no k6, etc.
+
+    import sleep from 'k6';
+
+### 2. Configuração
+É possível ter mais de um bloco de configurações. 
+Etapa executada repetidamente durante a execução do teste.
+Ex: definição da quantidade de usuários e do tempo de duração da execução. 
+
+    export const options = {
+        vus: 1
+        duration: '10s'
+    }
+
+
+### 3. Execução (ou código VU)
+Onde se define a execução do teste.
+
+export default function(){
+    console.log("testando o k6");
+    sleep(1);
+}
+
+
+### 4. Desmontagem
+Etapa opcional executada uma única vez, onde se processa os resultados do teste.
+Muito importante quando precisa enviar os resultados para algum lugar e/ou para notificação de outros sistemas.
+
+    export function teardown(data){
+        console.log(data)
+    }
+
+
+
+## IV. Métricas (aulas 13 e 14)
+
+O k6 já possui métrica integradas a ele mas é possível criar outras métricas que não venham nele por padrão.
+
+### 1. Métricas Integradas
+
+As métricas ficam no resultado, na saída do seu teste. 
+
+1. Contadores
+    Realizam somas e incrementos.
+
+2. Medidores
+    Usados para rastrear os maiores valores, menores valores e valores mais recentes.
+
+3. Taxas
+    Rastreia quando um valor diferente de zero ocorre.
+
+4. Tendência
+    Cálculo de média, moda, mediana e percentis de intervalos de confiança.
+
+### 2. Métricas personalizadas
+
+Assim como as métricas integradas, se dividem nos mesmos 4 tipos. 
+No entanto (como apresentado na aula 14), a função deve ser setada no código com os diversos métodos de métricas a serem apresentadas de forma automática no resultado. 
+
+![metrica_personalizada](/imagens/metricas_personalizadas.png)
+
+## 3. Thresholds -> limite. (aula 15)
+
+Um dos recursos mais importantes na utilização do k6.
+Utilizados como critérios de reprovação ou aprovação de um teste. 
+O limite também é uma métrica, mas uma métrica que esperamos que o teste atenda. Caso ele não atenda, o teste terminará (no tempo normal, sem ser interrompido) com status de FALHA.
+
+Não é necessário importar nenhum módulo. Apenas inserir os parâmetros dentro de options, na configuração do teste (sendo possível usar mais de um limite para cada parâmetro)
+
+![limite](/imagens/limite.png)
+
+Caso deseje abortar a execução quando um limite for atingido, precisa deixar isso exposto no código. 
+
+![limite_req_abort](/imagens/limit_abort.png)
+
+Delay: caso quebre, ele ainda espera mais o tempo de delay para parar a execução
+
+![delay](/imagens/delay.png)
+
+
+
+
+## V. Módulos (aula 16)
+
+Existem três tipos de módulos:
+
+![modulos](/imagens/modulos.png)
+
+### 1. Módulos Embutidos
+Módulos que já fazem parteda própria ferramenta. São os que garantem melhor performance.
+
+### 2. Módulos Remotos
+Módulos que não estão imbutidos diretamente nas libs do k6 mas que utilizamos por meio de importação remota através do protocolo HTTP.
+Caso precise utilizar, sempre dê preferência aos citados em https://jslib.k6.io/ . 
+
+### 3. Módulos do sistema local
+Fazer a utilização de um arquivo local para execução, tornando-o um módulo para execução da ferramenta.
+
+
+
+## VI. Grupos (aula 17)
+
+Ao realizar mais de uma requisição, os relatórios do k6 não conseguem diferenciar as requisições se não segragá-los por grupos. 
+Um grupo pode ser formado de uma ou mais requisições (uma transação) necessárias para realizar uma ação. 
+
+**Transação:**
+Ações necessárias para realizar uma transação. 
+Ex: Teste de login. Para realizar o login será necessário criar o usuário. Portanto, o fluxo que reune a criação do usuário com a requisição do login, compõe uma transação. 
+
+Ex de requisições em grupo e separação de métricas
+
+![group](/imagens/group.png)
+
+
+## VII. Tags (aula 18)
+
+Tags são maneiras de rotular elementos no k6 (podendo ser utilizadas em conjunto com os grupos). 
+Sua importância se da mais especificamente quando esses dados serão usados em outra ferramenta e se faz necessário uma tag pra distinguir de qual requisição os dados estão tratando.
+Porém, existem formar diferentes de utilização:
+
+1. Requests
+2. Checks
+3. Thresholds
+4. Métricas customizadas
+5. Todas as métricas de um teste
+
+
+### VIII. Ambientes (aula 19)
+
+Para o código reconhecer uma variável, é necessário setar a variável com   __ENV.<nome da variável> . 
+
+
+
+![variavel_ambiente](/imagens/variavel_ambiente.png)
+
+
+### IX. Scenarios (aula 20, 21 e 22)
+
+Os cenários nos permitem determinar **COMO** as **VUs** e as **iterações** serão executadas no nosso script de teste. 
+
+Os executores no k6 são agrupados em 3 grupos:
+
+### 1. Por número de iterações
+
+#### 1.a shared-iterations
+
+Compartilha iterações entre VUs.
+- Executor adequado quando desejamos que um **número específico de VUs** complete um **número específico de iterações**
+- Quantidade de iterações por VU **não importa**
+- **Tempo para concluir** uma série de iterações **é importante**
+
+
+#### 1.b per-vu-iterations
+
+Onde cada VU realiza o número de iterações configurada.
+- **Número específico de VUS** para completar um **número fixo de iterações**
+- Importante quando deseja particionar dados de teste entre as VUs, tendo que garantir o número de iterações de cada usuário virtual.
+
+### 2. Por números de VUs
+
+#### 2.a constant-vus
+Envia um número de VUs constante para a execução.
+- **Número específico de VUs** seja executado por um **período especificado de tempo**
+- Não importa o número de iterações, foco na quantidade de tempo mantida em iteração dos VUs.
+
+#### 2.b ramping-vus
+Aumenta o número de VUs conforme seus estágios configurados.
+
+### 3. Por taxa de iteração
+
+#### 3.a constant-arrival-rate
+Inicia a iteração a uma taxa constante.
+- Executor com foco em métricas como o RPS.
+- Número fixo de iterações iniciadas pelo k6 (ex: rate/iterações = 30)
+- Novas iterações iniciadas enquanto houver VUs disponíveis. 
+- Novas iterções seguindo sempre a taxa configurada. 
+(no exemplo, inserimos mais 50 VUs pra  caso algum usuário dos 30 utilizados no segundo anterior ainda estejam em execução. Então ao invés de aguardar liberarem usuários, usa da "taxa" a mais de segurança garantindo sempre 30 usuários iteragindo por minuto)
+
+
+#### 3.b ramping-arrival-rate
+Aumenta a taxa de iteração de acordo com os estágios configurados.
+
+#### Ex dos quatro tipos trabalhados no curso
+![executor](/imagens/executor.png)
