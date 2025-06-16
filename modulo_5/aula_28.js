@@ -1,6 +1,7 @@
 import http from 'k6/http';
 import { check } from 'k6';
 import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
+//para criar relatório basta adicionar esse módulo externo do K6
 
 
 export const options = {
@@ -25,5 +26,5 @@ export function handleSummary(data) {
     return {
       "teste_k6.html": htmlReport(data),
     };
-  }
+  } // e adicionar essa função, setando o nome do relatório de saída
 

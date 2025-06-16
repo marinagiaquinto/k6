@@ -428,3 +428,18 @@ Aumenta a taxa de iteração de acordo com os estágios configurados.
 
 #### Ex dos quatro tipos trabalhados no curso
 ![executor](/imagens/executor.png)
+
+
+### X. Relatórios (aula 28)
+
+Os relatórios fazem com que os dados resultantes do teste não mais apareçam no console e, sim, em uma pág web. 
+Para isso, como expresso na aula 28, basta exportar o módulo htmlReport e utilizar a função requeria. 
+
+1. Ao executar o teste será gerado automaticamente um novo arquivo. 
+
+![relatorio](/imagens/exec_relatorio.png)
+
+2. Indo na pasta e clicando no seu ícone, abrirá a página WEB.
+
+![relatorio](/imagens/icone_relatorio.png)
+![relatorio](/imagens/web_relatorio.png)
