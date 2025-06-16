@@ -24,4 +24,14 @@ jobs:
           filename:
 
       - name: step 4 - Executar cada script K6 individualmente (Recomendado para scripts distintos)
-        run: k6 run modulo_4/*.js
+        run: |
+          echo "Executando aula_23_ex1.js..."
+          k6 run aula_23_ex1.js
+          echo "Executando aula_24_ex2.js..."
+          k6 run aula_24_ex2.js
+          echo "Executando aula_25_ex1.js..."
+          k6 run aula_25_ex1.js
+          echo "Executando aula_26_ex1.js..."
+          k6 run aula_26_ex1.js
+          echo "Executando aula_27_ex1.js..."
+          k6 run aula_27_ex1.js
