@@ -185,6 +185,7 @@ Esse teste deve ser realizado com sistemas mais maduros, que já tiveram a aprov
     }
 
 
+
 ## II. Execução
     cd <pasta/modulo>
     k6 run <aula>
@@ -203,12 +204,42 @@ Essa chamada ocorre uma única vez e é nela em que carregaremos os arquivos loc
 ### 2. Configuração
 É possível ter mais de um bloco de configurações. 
 Etapa executada repetidamente durante a execução do teste.
-Ex: definição da quantidade de usuários e do tempo de duração da execução. 
+
+
+#### 2.1 Difereça entre VUS e TARGET
+
+| O que é | Onde é usado   | Significado |
+|---------|----------------|-------------|
+| vus     |Fora do stages  |Define um número **FIXO** de usuários virtuais durante todo o teste|
+|target   |Dentro do stages|Define um número de vus que o teste deve **ATINGIR** em cada estágio|
+
+
+
+Definição da quantidade de usuários e do tempo de duração da execução.
+
+Ex1: Inicia com 5 VUs e assim se mantém durante todo o teste
 
     export const options = {
-        vus: 1
-        duration: '10s'
+        vus: 5                 
+        duration: '10s'  
     }
+
+
+
+Ex2: 3 blocos: 
+- 0 -> 100 em 5 min; 
+- mantém 100 vus por mais 10m; 
+- 100 -> 0 em 5 min
+
+
+    export const options = {
+        stage:[
+            {duration: "5m", target:100 }
+            {duration: "10m", target: 100}
+            {duration: "5m", target: 0}
+        ]
+    }
+
 
 
 ### 3. Execução (ou código VU)
@@ -236,19 +267,36 @@ O k6 já possui métrica integradas a ele mas é possível criar outras métrica
 
 ### 1. Métricas Integradas
 
-As métricas ficam no resultado, na saída do seu teste. 
+#### 1.a Principais métricas padrão do k6
 
-1. Contadores
-    Realizam somas e incrementos.
+Abaixo estão as mais usadas e úteis:
 
-2. Medidores
-    Usados para rastrear os maiores valores, menores valores e valores mais recentes.
+| Métrica	             | Tipo	 | O que mede| 
+|------------------------|-------|------------|
+|http_reqs	             |Counter|Total de requisições HTTP feitas|
+|http_req_duration       |Trend  |Duração total de uma requisição HTTP (DNS + TCP + TLS + espera + resposta)|
+|http_req_failed         |Rate	 |Proporção de requisições HTTP que falharam|
+|http_req_blocked        |Trend	 |Tempo bloqueado (ex: espera de conexões)|
+|http_req_connecting     |Trend	 |Tempo gasto conectando ao servidor|
+|http_req_tls_handshaking|Trend	 |Tempo gasto na negociação TLS/SSL|
+|http_req_sending        |Trend	 |Tempo de envio dos dados da requisição|
+|http_req_waiting        |Trend	 |Tempo de espera pela resposta do servidor (tempo de “TTFB”)|
+|http_req_receiving      |Trend	 |Tempo gasto recebendo os dados da resposta|
+|vus                     |Gauge	 |Número atual de VUs (usuários virtuais) ativos|
+|vus_max                 |Gauge	 |Número máximo de VUs durante o teste|
+|checks                  |Rate   |Proporção de check()s que passaram|
+|iteration_duration      |Trend	 |Duração total de uma iteração da função default|
+|iterations              |Counter|Total de iterações executadas|
 
-3. Taxas
-    Rastreia quando um valor diferente de zero ocorre.
+#### 1.b Tipos de Métrica
 
-4. Tendência
-    Cálculo de média, moda, mediana e percentis de intervalos de confiança.
+|Tipo de Métrica | Nome em inglês | Exemplo              | Função|
+|----------------|----------------|----------------------|------------------------------------------------------------------------------------------------------|
+|Contadores      |**Counter**     | (http_reqs, iterations)   | Conta quantas vezes algo aconteceu. Realizam somas e incrementos.
+|Taxas           |**Rate**        | (checks, http_req_failed) | Proporção entre sucesso/falha. 
+|Tendência       |**Trend**       | (http_req_duration, iteration_duration, http_req_waiting) | Cálculo de média, moda, mediana e percentis de intervalos de confiança.
+|Medidor         |**Gauge**       | (vus, vus_max)        | Mede um valor no tempo atual, como o número de VUs ativos. Rastreia quando um valor diferente de zero ocorre.
+
 
 ### 2. Métricas personalizadas
 
@@ -261,7 +309,7 @@ No entanto (como apresentado na aula 14), a função deve ser setada no código 
 
 Um dos recursos mais importantes na utilização do k6.
 Utilizados como critérios de reprovação ou aprovação de um teste. 
-O limite também é uma métrica, mas uma métrica que esperamos que o teste atenda. Caso ele não atenda, o teste terminará (no tempo normal, sem ser interrompido) com status de FALHA.
+**O limite também é uma métrica, mas uma métrica que esperamos que o teste atenda.** Caso ele não atenda, o teste terminará (no tempo normal, sem ser interrompido) com status de FALHA.
 
 Não é necessário importar nenhum módulo. Apenas inserir os parâmetros dentro de options, na configuração do teste (sendo possível usar mais de um limite para cada parâmetro)
 

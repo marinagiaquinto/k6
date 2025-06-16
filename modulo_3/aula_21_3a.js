@@ -6,9 +6,9 @@ export const options = {
     contacts: {
       executor: 'constant-arrival-rate',
       duration: '30s',
-      rate: 30,
+      rate: 30, //iterações que serão feitas pelo tempo setado
       timeUnit: '1s',
-      preAllocatedVUs: 50,
+      preAllocatedVUs: 50, //quantidade de usuários que serão utilizados conforme a necessidade de execução do teste
     },
   },
 };
