@@ -13,7 +13,15 @@ jobs:
       - name: step 1 - checkout
         uses: actions/checkout@v3
 
-      - name: step 2 - run k6 load test
+      - name: step 2 - Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' 
+
+      - name: step 3 - Executar Múltiplos Testes K6
         uses: grafana/k6-action@v0.2.0
-        with: 
-          filename: modulo_4/*.js
+        with:
+          filename:
+
+      - name: step 4 - Executar cada script K6 individualmente (Recomendado para scripts distintos)
+        run: k6 run modulo_4/*.js
