@@ -55,7 +55,7 @@ Objetivo: testar se a feature e o script são funcionais e/ou continuam funciona
 
 
 
-### 3. Stress e Skipe test
+### 3. Stress e Spike test
 
 
 **Objetivo:** 
@@ -305,7 +305,7 @@ No entanto (como apresentado na aula 14), a função deve ser setada no código 
 
 ![metrica_personalizada](/imagens/metricas_personalizadas.png)
 
-## 3. Thresholds -> limite. (aula 15)
+### 3. Thresholds -> limite. (aula 15)
 
 Um dos recursos mais importantes na utilização do k6.
 Utilizados como critérios de reprovação ou aprovação de um teste. 
@@ -371,16 +371,14 @@ Porém, existem formar diferentes de utilização:
 5. Todas as métricas de um teste
 
 
-### VIII. Ambientes (aula 19)
+## VIII. Ambientes (aula 19)
 
 Para o código reconhecer uma variável, é necessário setar a variável com   __ENV.<nome da variável> . 
-
-
 
 ![variavel_ambiente](/imagens/variavel_ambiente.png)
 
 
-### IX. Scenarios (aula 20, 21 e 22)
+## IX. Scenarios (aula 20, 21 e 22)
 
 Os cenários nos permitem determinar **COMO** as **VUs** e as **iterações** serão executadas no nosso script de teste. 
 
@@ -430,7 +428,7 @@ Aumenta a taxa de iteração de acordo com os estágios configurados.
 ![executor](/imagens/executor.png)
 
 
-### X. Relatórios (aula 28)
+## X. Relatórios (aula 28 e 32)
 
 Os relatórios fazem com que os dados resultantes do teste não mais apareçam no console e, sim, em uma pág web. 
 Para isso, como expresso na aula 28, basta exportar o módulo htmlReport e utilizar a função requeria. 
@@ -443,3 +441,38 @@ Para isso, como expresso na aula 28, basta exportar o módulo htmlReport e utili
 
 ![relatorio](/imagens/icone_relatorio.png)
 ![relatorio](/imagens/web_relatorio.png)
+
+3. Relatório no yaml 
+
+Para adicionar o relatório ao yaml, é necessário que dentro do arquivo de teste se tenham as configs pra geração de relatório e que também tenha no yaml. 
+Depois de executada a pipeline > clicar na execução > clicar em **"relatorio de testes de performance"** > abrir a pasta zip > abrir o(s) arquivo(s) html. 
+Clicando no arquivo html, terá acesso ao relatório do teste requerido. 
+
+![relatorio_yaml](/imagens/relatorio_yaml.png)
+
+
+## XI. Teste de Performance no Front-end (aulas 33, 34 e 35)
+
+O K6 se destaca por conseguir fazer testes de performance tanto do back-en quanto do front-end. Os testes podem ser feitos considerando apenas cada camada separamente ou podem considerá-las de forma integrada.
+
+### 1. Objetivo geral do teste de desempenho de front-end:
+- Analisar se as páginas do aplicativo são otimizadas para renderizar rapidamente na tela de um usuário.
+- Analisar quanto tempo leva para um usuário interagir com os elementos de interface do aplicativo. 
+
+
+### 2. Tipos de teste de desempenho de front-end
+
+#### 2.1 Navegador
+
+O teste de carga baseado em navegador verifica o **desempenho do front-end** de um aplicativo **simulando usuários** reais usando um navegador para **acessar seu site**. 
+Aqui o objetivo é analisar **APENAS** o desempenho do **front-end**, desconsiderando o tempo de resposta do back-end.
+
+#### 2.2 Protocolo
+
+O teste de carga baseado em protocolo verifica o **desempenho do back-end** de um aplicativo simulando as solicitações subjacentes às ações do usuário. 
+Ou seja, as ações são feitas a partir das interações com o front-end, mas mede-se o tempo de resposta do front-end com base no tempo de resposta do back-end. 
+
+#### 2.3 Híbrido
+
+O teste de carga híbrido é uma combinação de teste de carga aseado em protocolo e baseado em navegador.
+Aqui realiza-se a análise tanto de pontos específicos do front-end quanto pontos do front-end em interação com o back-end.
