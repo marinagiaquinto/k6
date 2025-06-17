@@ -4,9 +4,9 @@ on:
 
 permissions:
   contents: write
-  
+
 jobs:
-  build: 
+  build:
     name: K6 load test
     runs-on: ubuntu-latest
     steps:
@@ -16,7 +16,12 @@ jobs:
       - name: step 2 - Configurar Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16' 
+          node-version: '16'
+
+      - name: step 3 - Instalar k6
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y k6
 
       - name: Run all k6 tests in modulo_4
         run: |
