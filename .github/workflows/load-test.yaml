@@ -25,7 +25,7 @@ jobs:
         with: 
           filename: modulo_4/aula_27_ex1.js
 
-      - run: ls & mkdir report & mv report_aula_23.html.html report & mv report_aula_24.html.html report & mv report_aula_27.html.html report
+      - run: ls & mkdir report & mv report_aula_23.html report & mv report_aula_24.html report & mv report_aula_27.html report
       
       - name: step 3 - upload artifact
         uses: actions/upload-artifact@v4     #https://github.com/marketplace/actions/upload-a-build-artifact#usage
