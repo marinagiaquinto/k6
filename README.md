@@ -462,17 +462,17 @@ O K6 se destaca por conseguir fazer testes de performance tanto do back-en quant
 
 ### 2. Tipos de teste de desempenho de front-end
 
-#### 2.1 Navegador
+#### 2.1 Navegador:
 
 O teste de carga baseado em navegador verifica o **desempenho do front-end** de um aplicativo **simulando usuários** reais usando um navegador para **acessar seu site**. 
 Aqui o objetivo é analisar **APENAS** o desempenho do **front-end**, desconsiderando o tempo de resposta do back-end.
 
-#### 2.2 Protocolo
+#### 2.2 Protocolo:
 
 O teste de carga baseado em protocolo verifica o **desempenho do back-end** de um aplicativo simulando as solicitações subjacentes às ações do usuário. 
 Ou seja, as ações são feitas a partir das interações com o front-end, mas mede-se o tempo de resposta do front-end com base no tempo de resposta do back-end. 
 
-#### 2.3 Híbrido
+#### 2.3 Híbrido:
 
 O teste de carga híbrido é uma combinação de teste de carga aseado em protocolo e baseado em navegador.
 Aqui realiza-se a análise tanto de pontos específicos do front-end quanto pontos do front-end em interação com o back-end.
