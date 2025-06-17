@@ -10,32 +10,21 @@ jobs:
       - name: step 1 - checkout
         uses: actions/checkout@v3
 
-      - name: step 2 - run k6 load test (aula 23)
-        uses: grafana/k6-action@v0.2.0
-        with: 
-          filename: modulo_4/aula_23_ex1.js
-
-      - name: step 3 - run k6 load test (aula 24)
+      - name: step 2 - run k6 load test (aula 24)
         uses: grafana/k6-action@v0.2.0
         with: 
           filename: modulo_4/aula_24_ex2.js
 
-      - name: step 4 - run k6 load test (aula 27)
+      - name: step 3 - run k6 load test (aula 27)
         uses: grafana/k6-action@v0.2.0
         with: 
           filename: modulo_4/aula_27_ex1.js
 
-      - run: ls & mkdir report & mv report_aula_23.html report & mv report_aula_24.html report & mv report_aula_27.html report
+      - run: ls & mkdir report & mv report_aula_24.html report & mv report_aula_27.html report
       
-      - name: step 3 - upload artifact
-        uses: actions/upload-artifact@v4     #https://github.com/marketplace/actions/upload-a-build-artifact#usage
+      - name: step 4 - upload artifact
+        uses: actions/upload-artifact@v4     # https://github.com/marketplace/actions/upload-a-build-artifact#usage
         with: 
           name: relatorio de testes de performance
           path: report
       
-      - name: step 4 - publish report
-        uses: peaceiris/actions-gh-pages@v3  
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: report

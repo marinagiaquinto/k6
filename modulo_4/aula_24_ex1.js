@@ -30,6 +30,6 @@ export default () =>{
     })
 
     sleep(1)
-    // o sleep serve para garantir que o usuário só vai realizar uma requisição a cada intervalo de tempo determinado, não mais.
+    // o sleep serve para garantir que o usuário só vai realizar uma requisição a cada intervalo de tempo determinado (aqui, um segundo), não mais.
     
 }

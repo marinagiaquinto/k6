@@ -39,4 +39,4 @@ export function handleSummary(data) {
     return {
       "report_aula_24.html": htmlReport(data),
     };
-  }
+}
