@@ -1,4 +1,6 @@
 import http from 'k6/http';
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js"; //relatório
+
 
 //Realizar consulta a API de listagem de crocodilos e busca por id de crocodilos
 // é esperado um RPS de 200 Req/spara a API de listagem durante 30s
@@ -33,7 +35,9 @@ export const options = {
     },
     discardResponseBodies: true
 }
+
 const BASE_URL = 'https://test-api.k6.io';
+
 export function listar(){
     
     http.get(BASE_URL+'/crocodiles')
@@ -46,3 +50,9 @@ export function buscar(){
         http.get(BASE_URL+'/crocodiles/1')
     }
 };
+
+export function handleSummary(data) {
+    return {
+      "report_aula_27.html": htmlReport(data),
+    };
+  }

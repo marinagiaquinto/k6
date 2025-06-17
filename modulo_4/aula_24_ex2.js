@@ -1,6 +1,7 @@
 import http from 'k6/http';
 import {sleep, check} from 'k6';
 import { SharedArray } from 'k6/data'; // função usada para carregar dados apenas uma vez, mesmo com múltiplos VUS.
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js"; //relatório
 
 
 //Mesmo teste realizado anteriormente, porém, com id variável na url
@@ -33,3 +34,9 @@ export default function(){
     });
     sleep(1);
 }
+
+export function handleSummary(data) {
+    return {
+      "report_aula_24.html": htmlReport(data),
+    };
+  }
