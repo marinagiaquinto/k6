@@ -28,13 +28,13 @@ jobs:
       - run: ls & mkdir report & mv report_aula_23.html.html report & mv report_aula_24.html.html report & mv report_aula_27.html.html report
       
       - name: step 3 - upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4     #https://github.com/marketplace/actions/upload-a-build-artifact#usage
         with: 
           name: relatorio de testes de performance
           path: report
       
       - name: step 4 - publish report
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v3  
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
