@@ -18,10 +18,9 @@ jobs:
         with:
           node-version: '16' 
 
-      - name: step 3 - Executar Múltiplos Testes K6
-        uses: grafana/k6-action@v0.2.0
-        with:
-          filename:
-
-      - name: step 4 - Executar cada script K6 individualmente (Recomendado para scripts distintos)
-        run: cd modulo_4 && k6 run modulo_4/*.js
+      - name: Run all k6 tests in modulo_4
+        run: |
+          for file in modulo_4/*.js; do
+            echo "Running $file"
+            k6 run "$file"
+          done
