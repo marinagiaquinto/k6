@@ -10,7 +10,29 @@ jobs:
       - name: step 1 - checkout
         uses: actions/checkout@v3
 
-      - name: step 2 - run k6 load test
+      - name: step 2 - run k6 load test (aula 23)
         uses: grafana/k6-action@v0.2.0
         with: 
-          filename: modulo_4/*.js
+          filename: modulo_4/aula_23_ex1.js
+
+      - name: step 3 - run k6 load test (aula 24)
+        uses: grafana/k6-action@v0.2.0
+        with: 
+          filename: modulo_4/aula_24_ex2.js
+
+      - name: step 4 - run k6 load test (aula 25)
+        uses: grafana/k6-action@v0.2.0
+        with: 
+          filename: modulo_4/aula_25_ex1.js
+
+      - name: step 5 - run k6 load test (aula 26)
+        uses: grafana/k6-action@v0.2.0
+        with: 
+          filename: modulo_4/aula_26_ex1.js
+
+      - name: step 6 - run k6 load test (aula 27)
+        uses: grafana/k6-action@v0.2.0
+        with: 
+          filename: modulo_4/aula_27_ex1.js
+
+      
