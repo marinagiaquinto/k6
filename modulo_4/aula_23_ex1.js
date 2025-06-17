@@ -31,6 +31,6 @@ export default () => {
 
 export function handleSummary(data) {
     return {
-      "report_aula_23.html": htmlReport(data),
+      "report_aula_23": htmlReport(data),
     };
   }
